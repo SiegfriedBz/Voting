@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { getContract, getContractWithS } from "../helpers/contractConfig"
+import { getContract } from "../helpers/contractConfig"
 
 import Action from "./Action"
 
@@ -11,11 +11,9 @@ const Ballot = ({ account, isAdmin, isVoter, ballot, onVoteSubmit }) => {
 
   useEffect(() => {
     if (account) {
-      ;(async () => {
-        await checkIfVoted()
-      })()
+      checkIfVoted()
     }
-  }, [account])
+  })
 
   // mapping(address => mapping(uint256 => bool)) public voterToBallotVoted;
   const checkIfVoted = async () => {
@@ -23,8 +21,6 @@ const Ballot = ({ account, isAdmin, isVoter, ballot, onVoteSubmit }) => {
     let accountVoted = await contract.voterToBallotVoted(account, ballotId)
     setVoted(accountVoted)
   }
-
-  console.log(voted)
 
   return (
     <>

@@ -30,18 +30,16 @@ function App() {
       ;(async () => {
         const admin = await contract.admin()
         setAdmin(admin)
-        await getBallots()
+        getBallots()
       })()
     }
   }, [contract])
 
   useEffect(() => {
     if (contract) {
-      ;(async () => {
-        await checkIfVoter()
-      })()
+      checkIfVoter()
     }
-  }, [account])
+  })
 
   const isAdmin = () => {
     if (account && admin) {
@@ -57,7 +55,7 @@ function App() {
   const onAddVoters = async (voters) => {
     let trx = await contractWithS.addVoters(voters)
     await trx.wait()
-    await checkIfVoter()
+    checkIfVoter()
   }
 
   const getBallots = async () => {
@@ -78,7 +76,7 @@ function App() {
       ballot.choices
     )
     await trx.wait()
-    await getBallots()
+    getBallots()
   }
 
   const onVoteSubmit = async (ballotId, choiceId) => {
@@ -88,12 +86,12 @@ function App() {
       gasLimit: 3000000,
     })
     await trx.wait()
-    await getBallots()
+    getBallots()
   }
 
   return (
     <div>
-      <Banner account={account} isVoter={isVoter} />
+      <Banner account={account} isVoter={isVoter} checkIfVoter={checkIfVoter} />
       <div className='container'>
         {isAdmin() && <AddVoters onAddVoters={onAddVoters} />}
         {isAdmin() && <CreateBallot onCreateBallot={onCreateBallot} />}
